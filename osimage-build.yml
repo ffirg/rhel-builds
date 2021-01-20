@@ -1,0 +1,69 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  gather_facts: false
+
+  vars:
+    packages: ['git']
+    services: 
+      - osbuild-composer
+    template: rhel8-base
+    blueprints_base: /var/www/html/rhel-builds
+    blueprints_dir: /var/www/html/rhel-builds/templates/
+    gitrepo: https://github.com/ffirg/rhel-builds
+    branch: dev
+    image_format: vhd
+
+  tasks:
+    - name: Ensure we have the necessary software
+      dnf:
+        name: "{{ packages }}"
+        state: latest
+      tags: [ software ]
+
+    - name: Ensure services are running
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop: "{{ services }}"
+      tags: [ config ]
+
+    - name: Get the latest OS image build template
+      git:
+        repo: "{{ gitrepo }}"
+        version: "{{ branch }}"
+        dest: "{{ blueprints_base}}"
+        force: yes
+        update: yes
+      tags: [ git ]
+
+    - name: Push the image build template
+      shell: 
+        cmd: composer-cli blueprints push {{ template }}.toml
+        chdir: "{{ blueprints_dir}}"
+      tags: [ osbuild ]
+
+    - name: Sanity check the image build template
+      shell: 
+        cmd: composer-cli blueprints depsolve {{ template }}
+        chdir: "{{ blueprints_dir}}"
+      tags: [ osbuild ]
+
+    - name: Kickoff the OS image build process
+      shell: 
+        cmd: composer-cli compose start {{ template }} {{ image_format }}
+        chdir: "{{ blueprints_dir}}"
+      register: build_output
+      tags: [ osbuild ]
+
+      # Compose 26773968-0f61-4211-b012-f60b98c1a90c added to the queue
+    - name: Get image build UUID
+      set_fact:
+        uuid: "{{ build_output.stdout | regex_search('^Compose[ ](\\w+[-]\\w+[-]\\w+[-]\\w+[-]\\w+)[ ]added[ ]to[ ]the[ ]queue$', '\\1') }}"
+      tags: [ osbuild ]
+
+    - debug: 
+        msg: Image builder UUID is {{ uuid }}
+      when: uuid is defined

@@ -1,24 +1,22 @@
 name = "rhel8-base"
-description = "RHEL8 Golden Build"
-version = "0.0.1"
+description = "RHEL8 Golden Cloud Image"
+version = "0.1.0"
 modules = []
-
-
-[[groups]]
-name = "Minimal Install"
-
+groups = []
 
 [[packages]]
-name = "bind-utils"
+name = "wget"
 version = "*"
-
 
 [customizations]
 hostname = "_newbuild8_"
 
-
 [[customizations.user]]
 name = "automation"
-description = "Default Automation Account for new builds"
-password = "$6$h.WqG3YoD3idasgdsgwerlC$5wnFoSZJsh5SipbxAQ2MFkl8hNhTvXPx9KSPi.W7vhWXInjfCHcs8LWFJDx7WxfasdfadsfasDJK0m2AbJdAmN7JZ7vJy1"
-key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2t8OtfJ7Qiv2i/qYBoPsgGeiZHpDu+1ERl6htVGPxmW8apgCS6PlbnqdIlyCkKqBnTTV3tvUhrjTBGcXsQhr+Dveem+Tb9dwWowP/ONVrMs5x1TiEhokP+sgskgsg+asfdsafasfasf+03DiJwmrwyTK3CW8Gei3LhTeu+qK0o34ozss1jBaRwM58oMbeGSGKT3RKycZ2tWB/SLzrae30VqumLOHHv/2YxJNKj/mbh/GykWrINbBmYz5bXpNI2BI70wL1He2hYqikvqNUVJ8hBaIeGT5PxL6H9WDX1FbT6r4MP"
+description = "Build Automation User"
+home = "/home/automation"
+shell = "/bin/bash"
+uid = 99999
+gid = 99999
+groups = ["wheel"]
+key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2t8OtfJ7Qiv2i/qYBoPsgGeiZHpDu+1ERl6htVGPxmW8apgCS6PlbnqdIlyCkKqBnTTV3tvUhrjTBGcXsQhr+Dveem+Tb9dwWowP/ONVrMs5x1TiEhokP+jJgeV7uwc1pNzuY+EXtkCmTqno4rztPTDmkfvEjKLRKRT6v57FcpAJHVwRzy+03DiJwmrwyTK3CW8Gei3LhTeu+qK0o34ozss1jBaRwM58oMbeGSGKT3RKycZ2tWB/SLzrae30VqumLOHHv/2YxJNKj/mbh/GykWrINbBmYz5bXpNI2BI70wL1He2hYqikvqNUVJ8hBaIeGT5PxL6H9WDX1FbT6r4MP"

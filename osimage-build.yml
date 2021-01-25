@@ -5,17 +5,28 @@
   gather_facts: false
 
   vars:
-    packages: ['git']
+    packages: ['git','tree']
     services: 
       - osbuild-composer
     template: rhel8-base
     blueprints_base: /var/www/html/rhel-builds
     blueprints_dir: /var/www/html/rhel-builds/templates/
+    images_dir: /data/images/
     gitrepo: https://github.com/ffirg/rhel-builds
     branch: dev
-    image_format: vhd
+    providers:
+      azure:
+        image_format: vhd
+      amazon:
+        image_format: ami
 
   tasks:
+
+    - name: Check we have a provider target...
+      fail: msg="Please set the cloud variable to something supported using -e"
+      when: ( cloud | length == 0 ) or ( cloud is not defined ) or ( cloud not in providers.keys() )
+      tags: [ preflight ]
+
     - name: Ensure we have the necessary software
       dnf:
         name: "{{ packages }}"
@@ -53,17 +64,45 @@
 
     - name: Kickoff the OS image build process
       shell: 
-        cmd: composer-cli compose start {{ template }} {{ image_format }}
+        #cmd: composer-cli compose start {{ template }} {{ providers['%s_image_format' | format(cloud)] }}
+        cmd: composer-cli compose start {{ template }} {{ providers[cloud].image_format }}
         chdir: "{{ blueprints_dir}}"
       register: build_output
       tags: [ osbuild ]
 
-      # Compose 26773968-0f61-4211-b012-f60b98c1a90c added to the queue
     - name: Get image build UUID
-      set_fact:
-        uuid: "{{ build_output.stdout | regex_search('^Compose[ ](\\w+[-]\\w+[-]\\w+[-]\\w+[-]\\w+)[ ]added[ ]to[ ]the[ ]queue$', '\\1') }}"
+      # match against --- Compose 26773968-0f61-4211-b012-f60b98c1a90c added to the queue
+      set_fact: 
+        uuid: "{{ build_output.stdout | regex_search('^Compose[ ](\\w+[-]\\w+[-]\\w+[-]\\w+[-]\\w+)[ ]added[ ]to[ ]the[ ]queue$', '\\1') | first }}"
       tags: [ osbuild ]
 
     - debug: 
         msg: Image builder UUID is {{ uuid }}
       when: uuid is defined
+      tags: [ osbuild ]
+
+    - name: Check image build progress
+      # returns something like --- f1feb7a3-056c-4d8c-a446-baa2af7c2e78 FINISHED|FAILED|RUNNING|WAITING rhel8-base 0.1.1 vhd
+      shell:
+        cmd: composer-cli compose list | grep {{ uuid }}
+        chdir: "{{ blueprints_dir}}"
+      register: build_status
+      until: build_status.stdout.find("FINISHED") != -1
+      retries: 20
+      delay: 30
+      tags: [ osbuild ]
+
+    - name: Check images output directory
+      file:
+        path: "{{ images_dir }}"
+        state: directory
+        owner: apache
+        group: apache
+        mode: '0750'
+
+    - name: Save OS Image
+      shell:
+        cmd: composer-cli compose image {{ uuid }}
+        chdir: "{{ images_dir}}"
+      tags: [ osbuild ]
+

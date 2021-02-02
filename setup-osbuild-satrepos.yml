@@ -6,7 +6,7 @@
   vars:
     packages: ['dnf-utils', 'composer-cli', 'lorax-composer', 'git']
     services: 
-      - osbuild-composer
+      - lorax-composer
     repos:
       - rhel-8-for-x86_64-baseos-rpms
       - rhel-8-for-x86_64-appstream-rpms

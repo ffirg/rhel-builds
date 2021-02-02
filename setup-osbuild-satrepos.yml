@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: false
+
+  vars:
+    packages: ['dnf-utils', 'createrepo_c', 'composer-cli', 'lorax-composer', 'httpd', 'git', 'cockpit', 'cockpit-composer']
+    services: 
+      - httpd
+      - osbuild-composer
+      - cockpit.socket
+    repos:
+      - rhel-8-for-x86_64-baseos-rpms
+      - rhel-8-for-x86_64-appstream-rpms
+
+  tasks:
+    - name: Ensure RHSM repositories are available
+      rhsm_repository:
+        name: '{{ item }}'
+        state: enabled
+      loop: "{{ repos }}"
+      tags: [ software ]
+
+    - name: Install RPMs
+      dnf:
+        name: "{{ packages }}"
+        state: latest
+      tags: [ software ]
+
+    - name: Change SELinux for composer
+      selinux:
+        policy: targeted
+        state: permissive
+      tags: [ config ]
+
+    - name: Start Services
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop: "{{ services }}"
+      tags: [ config ]
+
+    - name: Composer tells us to disable all RHSM repositories
+      rhsm_repository:
+        name: '*'
+        state: disabled
+      tags: [ rhsm ]

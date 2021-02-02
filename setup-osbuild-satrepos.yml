@@ -4,7 +4,7 @@
   gather_facts: false
 
   vars:
-    packages: ['dnf-utils', 'createrepo_c', 'composer-cli', 'lorax-composer', 'httpd', 'git', 'cockpit', 'cockpit-composer']
+    packages: ['dnf-utils', 'composer-cli', 'lorax-composer', 'httpd', 'git', 'cockpit', 'cockpit-composer']
     services: 
       - httpd
       - osbuild-composer

@@ -11,7 +11,7 @@
     template: rhel8-base
     blueprints_base: /var/www/html/rhel-builds
     blueprints_dir: /var/www/html/rhel-builds/templates/
-    images_dir: /data/images/
+    images_dir: /var/www/html/images/
     gitrepo: https://github.com/ffirg/rhel-builds
     branch: dev
     providers:
@@ -92,7 +92,7 @@
       delay: 30
       tags: [ osbuild ]
 
-    - name: Check images output directory
+    - name: Setup images output directory
       file:
         path: "{{ images_dir }}"
         state: directory

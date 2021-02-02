@@ -7,7 +7,7 @@
   vars:
     packages: ['git','tree']
     services: 
-      - osbuild-composer
+      - lorax-composer
     template: rhel8-base
     blueprints_base: /var/www/html/rhel-builds
     blueprints_dir: /var/www/html/rhel-builds/templates/

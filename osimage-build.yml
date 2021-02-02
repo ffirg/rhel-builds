@@ -78,6 +78,7 @@
 
     - debug: 
         msg: Image builder UUID is {{ uuid }}
+        verbosity: 1
       when: uuid is defined
       tags: [ osbuild ]
 

@@ -4,11 +4,9 @@
   gather_facts: false
 
   vars:
-    packages: ['dnf-utils', 'composer-cli', 'lorax-composer', 'httpd', 'git', 'cockpit', 'cockpit-composer']
+    packages: ['dnf-utils', 'composer-cli', 'lorax-composer', 'git']
     services: 
-      - httpd
       - osbuild-composer
-      - cockpit.socket
     repos:
       - rhel-8-for-x86_64-baseos-rpms
       - rhel-8-for-x86_64-appstream-rpms

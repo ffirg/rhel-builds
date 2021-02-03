@@ -109,3 +109,9 @@
         chdir: "{{ images_dir}}"
       tags: [ osbuild ]
 
+    - name: Retrieve OS Image from build server
+      fetch:
+        src: "{{ images_dir} }}/{{ uuid }}"
+        dest: "/var/tmp/{{ inventory_hostname }}"
+        flat: yes
+      tags: [ 'osbuild' , 'retrieve' ]

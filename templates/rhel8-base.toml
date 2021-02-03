@@ -5,7 +5,7 @@ modules = []
 groups = []
 
 [[packages]]
-name = "wget"
+name = "bind-utils"
 version = "*"
 
 [customizations]

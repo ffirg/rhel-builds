@@ -6,7 +6,6 @@
     rg_name: rhel-images
     location: uksouth
     storage_name: rhelbuilds
-    builder_host: ms-demo-vm1
 
   tasks:
 
@@ -42,8 +41,4 @@
         tags:
           os: RHEL
           infratype: images
-      delegate_to: "{{ builder_host }}"
       tags: [ 'azure', 'image' ]
-
-
-

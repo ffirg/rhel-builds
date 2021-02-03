@@ -4,9 +4,9 @@ version = "0.1.0"
 modules = []
 groups = []
 
-[[packages]]
-name = "rpm"
-version = "*"
+#[[packages]]
+#name = "wget"
+#version = "*"
 
 [customizations]
 hostname = "_newbuild8_"

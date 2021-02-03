@@ -4,7 +4,7 @@
 
   vars:
     rg_name: rhel-images
-    location: uk-south
+    location: uksouth
     storage_name: rhelbuilds
 
   tasks:

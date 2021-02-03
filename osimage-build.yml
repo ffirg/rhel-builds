@@ -115,3 +115,7 @@
         dest: "{{ images_dir }}"
         flat: yes
       tags: [ 'osbuild' , 'retrieve' ]
+
+    - name: OS Image cloud uploader
+      include: "osbuild-uploader-{{ cloud }}.yml"
+      tags: [ 'osbuild' , 'upload' ]

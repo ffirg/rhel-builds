@@ -8,6 +8,8 @@
     packages: ['git','tree']
     services: 
       - lorax-composer
+    user: root
+    group: root
     template: rhel8-base
     blueprints_base: /var/www/html/rhel-builds
     blueprints_dir: /var/www/html/rhel-builds/templates/
@@ -97,8 +99,8 @@
       file:
         path: "{{ images_dir }}"
         state: directory
-        owner: apache
-        group: apache
+        owner: "{{ user }}"
+        group: "{{ group }}"
         mode: '0750'
 
     - name: Save OS Image

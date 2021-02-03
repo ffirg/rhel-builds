@@ -13,7 +13,7 @@
     template: rhel8-base
     blueprints_base: /var/www/html/rhel-builds
     blueprints_dir: /var/www/html/rhel-builds/templates/
-    images_dir: /var/www/html/images/
+    images_dir: /var/www/html/images
     gitrepo: https://github.com/ffirg/rhel-builds
     branch: dev
     providers:
@@ -111,11 +111,11 @@
 
     - name: Retrieve OS Image from build server
       fetch:
-        src: "{{ images_dir }}{{ uuid }}-disk.{{ providers[cloud].image_format }}"
-        dest: "{{ images_dir }}{{ inventory_hostname }}/"
+        src: "{{ images_dir }}/{{ uuid }}-disk.{{ providers[cloud].image_format }}"
+        dest: "{{ images_dir }}/"
         flat: yes
       tags: [ 'osbuild' , 'retrieve' ]
 
     - name: OS Image cloud uploader
-      include: "osbuild-uploader-{{ cloud }}.yml"
+      import_tasks: "osbuild-uploader-{{ cloud }}.yml"
       tags: [ 'osbuild' , 'upload' ]

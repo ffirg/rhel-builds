@@ -23,6 +23,7 @@
         resource_group: "{{ rg_name }}"
         name: "{{ storage_name }}"
         type: Standard_GRS
+        access_tier: Cool
         kind: BlobStorage
         tags:
           os: RHEL

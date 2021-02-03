@@ -42,7 +42,7 @@
         tags:
           os: RHEL
           infratype: images
-      delegate_to: "{{ builder-host }}"
+      delegate_to: "{{ builder_host }}"
       tags: [ 'azure', 'image' ]
 
 

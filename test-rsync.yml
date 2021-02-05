@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  #remote_user: vagrant
   become: yes
   gather_facts: false
 
@@ -27,9 +26,9 @@
   tasks:
 
     - name: Retrieve OS Image from build server
-      synchronize:
-        mode: pull
-        src: "rsync://{{ inventory_hostname }}/{{ images_dir }}/{{ uuid }}-disk.{{ providers[cloud].image_format }}"
+      fetch:
+        src: "{{ images_dir }}/{{ uuid }}-disk.{{ providers[cloud].image_format }}"
         dest: "{{ images_dir }}/"
-      delegate_to: localhost
+        flat: yes
+      become: no
       tags: [ 'osbuild' , 'retrieve' ]

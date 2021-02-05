@@ -29,7 +29,8 @@
     - name: Check we have a provider target...
       fail: msg="Please set the cloud variable to something supported using -e"
       when: ( cloud | length == 0 ) or ( cloud is not defined ) or ( cloud not in providers.keys() )
-      tags: preflight
+      tags: 
+      - preflight
 
     - name: Ensure we have the necessary software
       dnf:

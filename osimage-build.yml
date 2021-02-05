@@ -22,15 +22,12 @@
       amazon:
         image_format: ami
 
-    uuid: f1feb7a3-056c-4d8c-a446-baa2af7c2e78
-
   tasks:
 
     - name: Check we have a provider target...
       fail: msg="Please set the cloud variable to something supported using -e"
       when: ( cloud | length == 0 ) or ( cloud is not defined ) or ( cloud not in providers.keys() )
-      tags: 
-      - preflight
+      tags: [ preflight ]
 
     - name: Ensure we have the necessary software
       dnf:
@@ -122,3 +119,4 @@
     - name: OS Image cloud uploader
       import_tasks: "osbuild-uploader-{{ cloud }}.yml"
       tags: [ 'osbuild' , 'upload' ]
+

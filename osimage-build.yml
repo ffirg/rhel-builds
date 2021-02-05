@@ -101,7 +101,7 @@
         state: directory
         owner: "{{ user }}"
         group: "{{ group }}"
-        mode: '0750'
+        mode: '0755'
 
     - name: Save OS Image
       shell:
@@ -109,14 +109,6 @@
         chdir: "{{ images_dir}}"
       tags: [ osbuild ]
 
-    - name: Retrieve OS Image from build server
-      synchronize:
-        src: "rsync://{{ inventory_hostname }}/{{ images_dir }}/{{ uuid }}-disk.{{ providers[cloud].image_format }}"
-        dest: "{{ images_dir }}/"
-      delegate_to: localhost
-      tags: [ 'osbuild' , 'retrieve' ]
-
-    - name: OS Image cloud uploader
-      import_playbook: "osimage-upload-{{ cloud }}.yml"
-      tags: [ 'osbuild' , 'upload' ]
-
+#    - name: OS Image cloud uploader
+#      import_playbook: "osimage-upload-{{ cloud }}.yml"
+#      tags: [ 'osbuild' , 'upload' ]

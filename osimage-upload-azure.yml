@@ -6,6 +6,7 @@
     rg_name: rhel-images
     location: uksouth
     storage_name: rhelbuilds
+    images_dir: /var/www/html/images
 
   tasks:
 
@@ -37,7 +38,7 @@
         container: goldbuilds
         state: present
         blob: "{{ uuid }}"
-        src: "{{ images_dir }}{{ uuid }}-disk.{{ providers[cloud].image_format }}"
+        src: "{{ images_dir }}/{{ uuid }}-disk.{{ providers[cloud].image_format }}"
         tags:
           os: RHEL
           infratype: images

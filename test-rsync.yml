@@ -12,7 +12,7 @@
     template: rhel8-base
     blueprints_base: /var/www/html/rhel-builds
     blueprints_dir: /var/www/html/rhel-builds/templates/
-    images_dir: /var/www/html/images
+    images_dir: /tmp
     gitrepo: https://github.com/ffirg/rhel-builds
     branch: dev
     providers:

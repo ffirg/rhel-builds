@@ -42,4 +42,3 @@
           os: RHEL
           infratype: images
       tags: [ 'azure', 'image' ]
-

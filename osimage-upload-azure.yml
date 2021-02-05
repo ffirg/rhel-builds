@@ -36,7 +36,7 @@
         storage_account_name: "{{ storage_name }}"
         container: goldbuilds
         state: present
-        blob: {{ uuid }}
+        blob: "{{ uuid }}"
         src: "{{ images_dir }}{{ uuid }}-disk.{{ providers[cloud].image_format }}"
         tags:
           os: RHEL
